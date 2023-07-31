@@ -59,10 +59,10 @@ class RoomGridLevel(RoomGrid):
 
         # If we've successfully completed the mission
         status = self.instrs.verify(action)
-        if status is 'success':
+        if status == 'success':
             done = True
             reward = self._reward()
-        elif status is 'failure':
+        elif status == 'failure':
             done = True
             reward = 0
 
@@ -233,7 +233,7 @@ class RoomGridLevel(RoomGrid):
 
             # If there is something other than a door in this cell, it
             # blocks reachability
-            if cell and cell.type is not 'door':
+            if cell and cell.type != 'door':
                 continue
 
             # Visit the horizontal and vertical neighbors
@@ -247,7 +247,7 @@ class RoomGridLevel(RoomGrid):
             for j in range(self.grid.height):
                 cell = self.grid.get(i, j)
 
-                if not cell or cell.type is 'wall':
+                if not cell or cell.type == 'wall':
                     continue
 
                 if (i, j) not in reachable:
@@ -486,9 +486,9 @@ class LevelGen(RoomGridLevel):
 
             kind = self._rand_elem(['before', 'after'])
 
-            if kind is 'before':
+            if kind == 'before':
                 return BeforeInstr(instr_a, instr_b)
-            elif kind is 'after':
+            elif kind == 'after':
                 return AfterInstr(instr_a, instr_b)
 
         elif kind == 'seq':
@@ -505,9 +505,9 @@ class LevelGen(RoomGridLevel):
 
             kind = self._rand_elem(['before', 'after'])
 
-            if kind is 'before':
+            if kind == 'before':
                 return BeforeInstr(instr_a, instr_b)
-            elif kind is 'after':
+            elif kind == 'after':
                 return AfterInstr(instr_a, instr_b)
 
             assert False

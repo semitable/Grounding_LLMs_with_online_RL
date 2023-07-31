@@ -1490,4 +1490,6 @@ class MiniGridEnv(gym.Env):
 
                     list_textual_descriptions.append(description)
 
-        return {'descriptions': list_textual_descriptions}
+        AVAIL_ACTIONS = "0: rotate left, 1: rotate right, 2: move forward, 3: pickup an object"
+
+        return {'observation': list_textual_descriptions, 'available actions': AVAIL_ACTIONS}
