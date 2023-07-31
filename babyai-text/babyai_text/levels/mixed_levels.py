@@ -699,7 +699,5 @@ class Level_MixedTrainLocalFrench(LevelGen):
         self.agent_dir = 0
 
 
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore")
-    register_levels(__name__, globals())
+register_levels(__name__, globals())
 

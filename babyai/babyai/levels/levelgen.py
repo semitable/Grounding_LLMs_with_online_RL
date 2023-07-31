@@ -6,6 +6,7 @@ import gym
 from gym_minigrid.roomgrid import RoomGrid
 from .verifier import *
 
+import warnings
 
 class RejectSampling(Exception):
     """
@@ -533,10 +534,12 @@ def register_levels(module_name, globals):
         # Register the levels with OpenAI Gym
         gym_id = 'BabyAI-%s-v0' % (level_name)
         entry_point = '%s:%s' % (module_name, global_name)
-        gym.envs.registration.register(
-            id=gym_id,
-            entry_point=entry_point,
-        )
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            gym.envs.registration.register(
+                id=gym_id,
+                entry_point=entry_point,
+            )
 
         # Add the level to the dictionary
         level_dict[level_name] = level_class
