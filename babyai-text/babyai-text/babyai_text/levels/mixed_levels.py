@@ -1,3 +1,4 @@
+import warnings
 from babyai.levels.levelgen import *
 
 class Level_MixedTrainLocal(LevelGen):
@@ -698,4 +699,7 @@ class Level_MixedTrainLocalFrench(LevelGen):
         self.agent_dir = 0
 
 
-register_levels(__name__, globals())
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore")
+    register_levels(__name__, globals())
+
