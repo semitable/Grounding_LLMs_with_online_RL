@@ -12,6 +12,7 @@ setup(
         'numpy>=1.17.0',
         "torch>=0.4.1",
         'blosc>=1.5.1',
+        "matplotlib>=3.7",
         "tqdm==4.65",
         # 'gym_minigrid @ https://github.com/maximecb/gym-minigrid/archive/master.zip'
     ],
