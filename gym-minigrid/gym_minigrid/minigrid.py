@@ -11,50 +11,43 @@ TILE_PIXELS = 32
 
 # Map of color names to RGB values
 COLORS = {
-    'red': np.array([255, 0, 0]),
-    'green': np.array([0, 255, 0]),
-    'blue': np.array([0, 0, 255]),
-    'purple': np.array([112, 39, 195]),
-    'yellow': np.array([255, 255, 0]),
-    'grey': np.array([100, 100, 100])
+    "red": np.array([255, 0, 0]),
+    "green": np.array([0, 255, 0]),
+    "blue": np.array([0, 0, 255]),
+    "purple": np.array([112, 39, 195]),
+    "yellow": np.array([255, 255, 0]),
+    "grey": np.array([100, 100, 100]),
 }
 
 COLOR_NAMES = sorted(list(COLORS.keys()))
 
 # Used to map colors to integers
-COLOR_TO_IDX = {
-    'red': 0,
-    'green': 1,
-    'blue': 2,
-    'purple': 3,
-    'yellow': 4,
-    'grey': 5
-}
+COLOR_TO_IDX = {"red": 0, "green": 1, "blue": 2, "purple": 3, "yellow": 4, "grey": 5}
 
 IDX_TO_COLOR = dict(zip(COLOR_TO_IDX.values(), COLOR_TO_IDX.keys()))
 
 # Map of object type to integers
 OBJECT_TO_IDX = {
-    'unseen': 0,
-    'empty': 1,
-    'wall': 2,
-    'floor': 3,
-    'door': 4,
-    'key': 5,
-    'ball': 6,
-    'box': 7,
-    'goal': 8,
-    'lava': 9,
-    'agent': 10,
+    "unseen": 0,
+    "empty": 1,
+    "wall": 2,
+    "floor": 3,
+    "door": 4,
+    "key": 5,
+    "ball": 6,
+    "box": 7,
+    "goal": 8,
+    "lava": 9,
+    "agent": 10,
 }
 
 IDX_TO_OBJECT = dict(zip(OBJECT_TO_IDX.values(), OBJECT_TO_IDX.keys()))
 
 # Map of state names to integers
 STATE_TO_IDX = {
-    'open': 0,
-    'closed': 1,
-    'locked': 2,
+    "open": 0,
+    "closed": 1,
+    "locked": 2,
 }
 
 # Map of agent direction indices to vectors
@@ -119,28 +112,28 @@ class WorldObj:
         obj_type = IDX_TO_OBJECT[type_idx]
         color = IDX_TO_COLOR[color_idx]
 
-        if obj_type == 'empty' or obj_type == 'unseen':
+        if obj_type == "empty" or obj_type == "unseen":
             return None
 
         # State, 0: open, 1: closed, 2: locked
         is_open = state == 0
         is_locked = state == 2
 
-        if obj_type == 'wall':
+        if obj_type == "wall":
             v = Wall(color)
-        elif obj_type == 'floor':
+        elif obj_type == "floor":
             v = Floor(color)
-        elif obj_type == 'ball':
+        elif obj_type == "ball":
             v = Ball(color)
-        elif obj_type == 'key':
+        elif obj_type == "key":
             v = Key(color)
-        elif obj_type == 'box':
+        elif obj_type == "box":
             v = Box(color)
-        elif obj_type == 'door':
+        elif obj_type == "door":
             v = Door(color, is_open, is_locked)
-        elif obj_type == 'goal':
+        elif obj_type == "goal":
             v = Goal()
-        elif obj_type == 'lava':
+        elif obj_type == "lava":
             v = Lava()
         else:
             assert False, "unknown object type in decode '%s'" % objType
@@ -154,7 +147,7 @@ class WorldObj:
 
 class Goal(WorldObj):
     def __init__(self):
-        super().__init__('goal', 'green')
+        super().__init__("goal", "green")
 
     def can_overlap(self):
         return True
@@ -168,8 +161,8 @@ class Floor(WorldObj):
     Colored floor tile the agent can walk over
     """
 
-    def __init__(self, color='blue'):
-        super().__init__('floor', color)
+    def __init__(self, color="blue"):
+        super().__init__("floor", color)
 
     def can_overlap(self):
         return True
@@ -179,17 +172,14 @@ class Floor(WorldObj):
         c = COLORS[self.color]
         r.setLineColor(100, 100, 100, 0)
         r.setColor(*c / 2)
-        r.drawPolygon([
-            (1, TILE_PIXELS),
-            (TILE_PIXELS, TILE_PIXELS),
-            (TILE_PIXELS, 1),
-            (1, 1)
-        ])
+        r.drawPolygon(
+            [(1, TILE_PIXELS), (TILE_PIXELS, TILE_PIXELS), (TILE_PIXELS, 1), (1, 1)]
+        )
 
 
 class Lava(WorldObj):
     def __init__(self):
-        super().__init__('lava', 'red')
+        super().__init__("lava", "red")
 
     def can_overlap(self):
         return True
@@ -211,8 +201,8 @@ class Lava(WorldObj):
 
 
 class Wall(WorldObj):
-    def __init__(self, color='grey'):
-        super().__init__('wall', color)
+    def __init__(self, color="grey"):
+        super().__init__("wall", color)
 
     def see_behind(self):
         return False
@@ -223,7 +213,7 @@ class Wall(WorldObj):
 
 class Door(WorldObj):
     def __init__(self, color, is_open=False, is_locked=False):
-        super().__init__('door', color)
+        super().__init__("door", color)
         self.is_open = is_open
         self.is_locked = is_locked
 
@@ -285,8 +275,8 @@ class Door(WorldObj):
 
 
 class Key(WorldObj):
-    def __init__(self, color='blue'):
-        super(Key, self).__init__('key', color)
+    def __init__(self, color="blue"):
+        super(Key, self).__init__("key", color)
 
     def can_pickup(self):
         return True
@@ -307,8 +297,8 @@ class Key(WorldObj):
 
 
 class Ball(WorldObj):
-    def __init__(self, color='blue'):
-        super(Ball, self).__init__('ball', color)
+    def __init__(self, color="blue"):
+        super(Ball, self).__init__("ball", color)
 
     def can_pickup(self):
         return True
@@ -319,7 +309,7 @@ class Ball(WorldObj):
 
 class Box(WorldObj):
     def __init__(self, color, contains=None):
-        super(Box, self).__init__('box', color)
+        super(Box, self).__init__("box", color)
         self.contains = contains
 
     def can_pickup(self):
@@ -383,6 +373,7 @@ class Grid:
 
     def copy(self):
         from copy import deepcopy
+
         return deepcopy(self)
 
     def set(self, i, j, v):
@@ -445,8 +436,7 @@ class Grid:
                 x = topX + i
                 y = topY + j
 
-                if x >= 0 and x < self.width and \
-                        y >= 0 and y < self.height:
+                if x >= 0 and x < self.width and y >= 0 and y < self.height:
                     v = self.get(x, y)
                 else:
                     v = Wall()
@@ -457,12 +447,7 @@ class Grid:
 
     @classmethod
     def render_tile(
-            cls,
-            obj,
-            agent_dir=None,
-            highlight=False,
-            tile_size=TILE_PIXELS,
-            subdivs=3
+        cls, obj, agent_dir=None, highlight=False, tile_size=TILE_PIXELS, subdivs=3
     ):
         """
         Render a tile and cache the result
@@ -475,7 +460,9 @@ class Grid:
         if key in cls.tile_cache:
             return cls.tile_cache[key]
 
-        img = np.zeros(shape=(tile_size * subdivs, tile_size * subdivs, 3), dtype=np.uint8)
+        img = np.zeros(
+            shape=(tile_size * subdivs, tile_size * subdivs, 3), dtype=np.uint8
+        )
 
         # Draw the grid lines (top and left edges)
         fill_coords(img, point_in_rect(0, 0.031, 0, 1), (100, 100, 100))
@@ -508,13 +495,7 @@ class Grid:
 
         return img
 
-    def render(
-            self,
-            tile_size,
-            agent_pos=None,
-            agent_dir=None,
-            highlight_mask=None
-    ):
+    def render(self, tile_size, agent_pos=None, agent_dir=None, highlight_mask=None):
         """
         Render this grid at a given scale
         :param r: target renderer object
@@ -540,7 +521,7 @@ class Grid:
                     cell,
                     agent_dir=agent_dir if agent_here else None,
                     highlight=highlight_mask[i, j],
-                    tile_size=tile_size
+                    tile_size=tile_size,
                 )
 
                 ymin = j * tile_size
@@ -559,7 +540,7 @@ class Grid:
         if vis_mask is None:
             vis_mask = np.ones((self.width, self.height), dtype=bool)
 
-        array = np.zeros((self.width, self.height, 3), dtype='uint8')
+        array = np.zeros((self.width, self.height, 3), dtype="uint8")
 
         for i in range(self.width):
             for j in range(self.height):
@@ -567,7 +548,7 @@ class Grid:
                     v = self.get(i, j)
 
                     if v is None:
-                        array[i, j, 0] = OBJECT_TO_IDX['empty']
+                        array[i, j, 0] = OBJECT_TO_IDX["empty"]
                         array[i, j, 1] = 0
                         array[i, j, 2] = 0
 
@@ -593,7 +574,7 @@ class Grid:
                 type_idx, color_idx, state = array[i, j]
                 v = WorldObj.decode(type_idx, color_idx, state)
                 grid.set(i, j, v)
-                vis_mask[i, j] = (type_idx != OBJECT_TO_IDX['unseen'])
+                vis_mask[i, j] = type_idx != OBJECT_TO_IDX["unseen"]
 
         return grid, vis_mask
 
@@ -642,10 +623,7 @@ class MiniGridEnv(gym.Env):
     2D grid world game environment
     """
 
-    metadata = {
-        'render.modes': ['human', 'rgb_array'],
-        'video.frames_per_second': 10
-    }
+    metadata = {"render.modes": ["human", "rgb_array"], "video.frames_per_second": 10}
 
     # Enumeration of possible actions
     class Actions(IntEnum):
@@ -665,15 +643,15 @@ class MiniGridEnv(gym.Env):
         done = 6
 
     def __init__(
-            self,
-            grid_size=None,
-            width=None,
-            height=None,
-            max_steps=100,
-            see_through_walls=False,
-            seed=1337,
-            agent_view_size=7,
-            language='english'
+        self,
+        grid_size=None,
+        width=None,
+        height=None,
+        max_steps=100,
+        see_through_walls=False,
+        seed=1337,
+        agent_view_size=7,
+        language="english",
     ):
         # Can't set both grid_size and width/height
         if grid_size:
@@ -696,13 +674,15 @@ class MiniGridEnv(gym.Env):
             low=0,
             high=255,
             shape=(self.agent_view_size, self.agent_view_size, 3),
-            dtype='uint8'
+            dtype="uint8",
         )
-        self.observation_space = spaces.Dict({
-            'image': self.observation_space,
-            'direction': spaces.Discrete(n=1),
-            'mission': spaces.Text(max_length=500)
-        })
+        self.observation_space = spaces.Dict(
+            {
+                "image": self.observation_space,
+                "direction": spaces.Discrete(n=1),
+                # 'mission': spaces.Text(max_length=500)
+            }
+        )
 
         # Range of possible rewards
         self.reward_range = (0, 1)
@@ -756,7 +736,9 @@ class MiniGridEnv(gym.Env):
         # Return first observation
         obs = self.gen_obs()
         ##### APPENDED CODE #####
-        info = self.gen_graph(move_forward=None)  # add info Episodic Knowledge to minigrid
+        info = self.gen_graph(
+            move_forward=None
+        )  # add info Episodic Knowledge to minigrid
         ##### APPENDED CODE #####
 
         return obs, info
@@ -779,31 +761,25 @@ class MiniGridEnv(gym.Env):
 
         # Map of object types to short string
         OBJECT_TO_STR = {
-            'wall': 'W',
-            'floor': 'F',
-            'door': 'D',
-            'key': 'K',
-            'ball': 'A',
-            'box': 'B',
-            'goal': 'G',
-            'lava': 'V',
+            "wall": "W",
+            "floor": "F",
+            "door": "D",
+            "key": "K",
+            "ball": "A",
+            "box": "B",
+            "goal": "G",
+            "lava": "V",
         }
 
         # Short string for opened door
-        OPENDED_DOOR_IDS = '_'
+        OPENDED_DOOR_IDS = "_"
 
         # Map agent's direction to short string
-        AGENT_DIR_TO_STR = {
-            0: '>',
-            1: 'V',
-            2: '<',
-            3: '^'
-        }
+        AGENT_DIR_TO_STR = {0: ">", 1: "V", 2: "<", 3: "^"}
 
-        str = ''
+        str = ""
 
         for j in range(self.grid.height):
-
             for i in range(self.grid.width):
                 if i == self.agent_pos[0] and j == self.agent_pos[1]:
                     str += 2 * AGENT_DIR_TO_STR[self.agent_dir]
@@ -812,23 +788,23 @@ class MiniGridEnv(gym.Env):
                 c = self.grid.get(i, j)
 
                 if c == None:
-                    str += '  '
+                    str += "  "
                     continue
 
-                if c.type == 'door':
+                if c.type == "door":
                     if c.is_open:
-                        str += '__'
+                        str += "__"
                     elif c.is_locked:
-                        str += 'L' + c.color[0].upper()
+                        str += "L" + c.color[0].upper()
                     else:
-                        str += 'D' + c.color[0].upper()
+                        str += "D" + c.color[0].upper()
                     continue
 
                 color_code = c.color[0].upper() if c.color != "grey" else "Q"
                 str += OBJECT_TO_STR[c.type] + color_code
 
             if j < self.grid.height - 1:
-                str += '\n'
+                str += "\n"
 
         return str
 
@@ -861,7 +837,7 @@ class MiniGridEnv(gym.Env):
         Generate random boolean value
         """
 
-        return (self.np_random.integers(0, 2) == 0)
+        return self.np_random.integers(0, 2) == 0
 
     def _rand_elem(self, iterable):
         """
@@ -903,16 +879,10 @@ class MiniGridEnv(gym.Env):
 
         return (
             self.np_random.integers(xLow, xHigh),
-            self.np_random.integers(yLow, yHigh)
+            self.np_random.integers(yLow, yHigh),
         )
 
-    def place_obj(self,
-                  obj,
-                  top=None,
-                  size=None,
-                  reject_fn=None,
-                  max_tries=math.inf
-                  ):
+    def place_obj(self, obj, top=None, size=None, reject_fn=None, max_tries=math.inf):
         """
         Place an object at an empty position in the grid
 
@@ -935,14 +905,16 @@ class MiniGridEnv(gym.Env):
             # This is to handle with rare cases where rejection sampling
             # gets stuck in an infinite loop
             if num_tries > max_tries:
-                raise RecursionError('rejection sampling failed in place_obj')
+                raise RecursionError("rejection sampling failed in place_obj")
 
             num_tries += 1
 
-            pos = np.array((
-                self._rand_int(top[0], min(top[0] + size[0], self.grid.width)),
-                self._rand_int(top[1], min(top[1] + size[1], self.grid.height))
-            ))
+            pos = np.array(
+                (
+                    self._rand_int(top[0], min(top[0] + size[0], self.grid.width)),
+                    self._rand_int(top[1], min(top[1] + size[1], self.grid.height)),
+                )
+            )
 
             # Don't place the object on top of another object
             if self.grid.get(*pos) != None:
@@ -975,13 +947,7 @@ class MiniGridEnv(gym.Env):
         obj.init_pos = (i, j)
         obj.cur_pos = (i, j)
 
-    def place_agent(
-            self,
-            top=None,
-            size=None,
-            rand_dir=True,
-            max_tries=math.inf
-    ):
+    def place_agent(self, top=None, size=None, rand_dir=True, max_tries=math.inf):
         """
         Set the agent's starting point at an empty position in the grid
         """
@@ -1044,7 +1010,7 @@ class MiniGridEnv(gym.Env):
 
         # Project the coordinates of the object relative to the top-left
         # corner onto the agent's own coordinate system
-        vx = (rx * lx + ry * ly)
+        vx = rx * lx + ry * ly
         vy = -(dx * lx + dy * ly)
 
         return vx, vy
@@ -1109,7 +1075,7 @@ class MiniGridEnv(gym.Env):
         vx, vy = coordinates
 
         obs = self.gen_obs()
-        obs_grid, _ = Grid.decode(obs['image'])
+        obs_grid, _ = Grid.decode(obs["image"])
         obs_cell = obs_grid.get(vx, vy)
         world_cell = self.grid.get(x, y)
 
@@ -1141,10 +1107,10 @@ class MiniGridEnv(gym.Env):
         elif action == self.actions.forward:
             if fwd_cell == None or fwd_cell.can_overlap():
                 self.agent_pos = fwd_pos
-            if fwd_cell != None and fwd_cell.type == 'goal':
+            if fwd_cell != None and fwd_cell.type == "goal":
                 done = True
                 reward = self._reward()
-            if fwd_cell != None and fwd_cell.type == 'lava':
+            if fwd_cell != None and fwd_cell.type == "lava":
                 done = True
 
         # Pick up an object
@@ -1186,7 +1152,9 @@ class MiniGridEnv(gym.Env):
             if np.all(self.agent_pos == fwd_pos):
                 move_forward = True
 
-        info = self.gen_graph(move_forward=move_forward)  # add info about the Episodic Knowledge to the minigrid return
+        info = self.gen_graph(
+            move_forward=move_forward
+        )  # add info about the Episodic Knowledge to the minigrid return
         ##### APPENDED CODE #####
 
         return obs, reward, done, info
@@ -1208,7 +1176,9 @@ class MiniGridEnv(gym.Env):
         # Process occluders and visibility
         # Note that this incurs some performance cost
         if not self.see_through_walls:
-            vis_mask = grid.process_vis(agent_pos=(self.agent_view_size // 2, self.agent_view_size - 1))
+            vis_mask = grid.process_vis(
+                agent_pos=(self.agent_view_size // 2, self.agent_view_size - 1)
+            )
         else:
             vis_mask = np.ones(shape=(grid.width, grid.height), dtype=bool)
 
@@ -1233,17 +1203,15 @@ class MiniGridEnv(gym.Env):
         # Encode the partially observable view into a numpy array
         image = grid.encode(vis_mask)
 
-        assert hasattr(self, 'mission'), "environments must define a textual mission string"
+        assert hasattr(
+            self, "mission"
+        ), "environments must define a textual mission string"
 
         # Observations are dictionaries containing:
         # - an image (partially observable view of the environment)
         # - the agent's direction/orientation (acting as a compass)
         # - a textual mission string (instructions for the agent)
-        obs = {
-            'image': image,
-            'direction': self.agent_dir,
-            'mission': self.mission
-        }
+        obs = {"image": image, "direction": self.agent_dir, "mission": self.mission}
 
         return obs
 
@@ -1259,12 +1227,12 @@ class MiniGridEnv(gym.Env):
             tile_size,
             agent_pos=(self.agent_view_size // 2, self.agent_view_size - 1),
             agent_dir=3,
-            highlight_mask=vis_mask
+            highlight_mask=vis_mask,
         )
 
         return img
 
-    def render(self, mode='human', close=False, highlight=True, tile_size=TILE_PIXELS):
+    def render(self, mode="human", close=False, highlight=True, tile_size=TILE_PIXELS):
         """
         Render the whole-grid human view
         """
@@ -1274,9 +1242,10 @@ class MiniGridEnv(gym.Env):
                 self.window.close()
             return
 
-        if mode == 'human' and not self.window:
+        if mode == "human" and not self.window:
             import gym_minigrid.window
-            self.window = gym_minigrid.window.Window('gym_minigrid')
+
+            self.window = gym_minigrid.window.Window("gym_minigrid")
             self.window.show(block=False)
 
         # Compute which cells are visible to the agent
@@ -1286,7 +1255,11 @@ class MiniGridEnv(gym.Env):
         # of the agent's view area
         f_vec = self.dir_vec
         r_vec = self.right_vec
-        top_left = self.agent_pos + f_vec * (self.agent_view_size - 1) - r_vec * (self.agent_view_size // 2)
+        top_left = (
+            self.agent_pos
+            + f_vec * (self.agent_view_size - 1)
+            - r_vec * (self.agent_view_size // 2)
+        )
 
         # Mask of which cells to highlight
         highlight_mask = np.zeros(shape=(self.width, self.height), dtype=bool)
@@ -1314,10 +1287,10 @@ class MiniGridEnv(gym.Env):
             tile_size,
             self.agent_pos,
             self.agent_dir,
-            highlight_mask=highlight_mask if highlight else None
+            highlight_mask=highlight_mask if highlight else None,
         )
 
-        if mode == 'human':
+        if mode == "human":
             self.window.show_img(img)
             self.window.set_caption(self.mission)
 
@@ -1330,28 +1303,54 @@ class MiniGridEnv(gym.Env):
         image = grid.encode(vis_mask)
         # (OBJECT_TO_IDX[self.type], COLOR_TO_IDX[self.color], state)
         # State, 0: open, 1: closed, 2: locked
-        if self.language == 'english':
-            IDX_TO_STATE = {0: 'open', 1: 'closed', 2: 'locked'}
+        if self.language == "english":
+            IDX_TO_STATE = {0: "open", 1: "closed", 2: "locked"}
             IDX_TO_COLOR = dict(zip(COLOR_TO_IDX.values(), COLOR_TO_IDX.keys()))
             IDX_TO_OBJECT = dict(zip(OBJECT_TO_IDX.values(), OBJECT_TO_IDX.keys()))
 
-        elif self.language == 'french':
-            IDX_TO_STATE = {0: 'ouverte', 1: 'fermée', 2: 'fermée à clef'}
-            IDX_TO_COLOR = {0: 'rouge', 1: 'verte', 2: 'bleue', 3: 'violette', 4: 'jaune', 5: 'grise'}
-            IDX_TO_OBJECT = {0: 'non visible', 1: 'vide', 2: 'mur', 3: 'sol', 4: 'porte', 5: 'clef',
-                             6: 'balle', 7: 'boîte', 8: 'but', 9: 'lave', 10: 'agent'}
+        elif self.language == "french":
+            IDX_TO_STATE = {0: "ouverte", 1: "fermée", 2: "fermée à clef"}
+            IDX_TO_COLOR = {
+                0: "rouge",
+                1: "verte",
+                2: "bleue",
+                3: "violette",
+                4: "jaune",
+                5: "grise",
+            }
+            IDX_TO_OBJECT = {
+                0: "non visible",
+                1: "vide",
+                2: "mur",
+                3: "sol",
+                4: "porte",
+                5: "clef",
+                6: "balle",
+                7: "boîte",
+                8: "but",
+                9: "lave",
+                10: "agent",
+            }
 
         list_textual_descriptions = []
 
         if self.carrying is not None:
             # print('carrying')
-            if self.language == 'english':
-                list_textual_descriptions.append("You carry a {} {}".format(self.carrying.color, self.carrying.type))
-            elif self.language == 'french':
-                list_textual_descriptions.append("Tu portes une {} {}".format(self.carrying.type, self.carrying.color))
+            if self.language == "english":
+                list_textual_descriptions.append(
+                    "You carry a {} {}".format(self.carrying.color, self.carrying.type)
+                )
+            elif self.language == "french":
+                list_textual_descriptions.append(
+                    "Tu portes une {} {}".format(
+                        self.carrying.type, self.carrying.color
+                    )
+                )
 
         # print('A agent position i: {}, j: {}'.format(self.agent_pos[0], self.agent_pos[1]))
-        agent_pos_vx, agent_pos_vy = self.get_view_coords(self.agent_pos[0], self.agent_pos[1])
+        agent_pos_vx, agent_pos_vy = self.get_view_coords(
+            self.agent_pos[0], self.agent_pos[1]
+        )
         # print('B agent position i: {}, j: {}'.format(agent_pos_vx, agent_pos_vy))
 
         view_field_dictionary = dict()
@@ -1374,11 +1373,14 @@ class MiniGridEnv(gym.Env):
         while j >= 0 and not object_seen:
             if image[agent_pos_vx][j][0] != 0 and image[agent_pos_vx][j][0] != 1:
                 if image[agent_pos_vx][j][0] == 2:
-                    if self.language == 'english':
+                    if self.language == "english":
                         list_textual_descriptions.append(
-                            f"You see a wall {agent_pos_vy - j} step{'s' if agent_pos_vy - j > 1 else ''} forward")
-                    elif self.language == 'french':
-                        list_textual_descriptions.append("Tu vois un mur à {} pas devant".format(agent_pos_vy - j))
+                            f"You see a wall {agent_pos_vy - j} step{'s' if agent_pos_vy - j > 1 else ''} forward"
+                        )
+                    elif self.language == "french":
+                        list_textual_descriptions.append(
+                            "Tu vois un mur à {} pas devant".format(agent_pos_vy - j)
+                        )
                     object_seen = True
                 else:
                     object_seen = True
@@ -1389,11 +1391,14 @@ class MiniGridEnv(gym.Env):
         while i >= 0 and not object_seen:
             if image[i][agent_pos_vy][0] != 0 and image[i][agent_pos_vy][0] != 1:
                 if image[i][agent_pos_vy][0] == 2:
-                    if self.language == 'english':
+                    if self.language == "english":
                         list_textual_descriptions.append(
-                            f"You see a wall {agent_pos_vx - i} step{'s' if agent_pos_vx - i > 1 else ''} left")
-                    elif self.language == 'french':
-                        list_textual_descriptions.append("Tu vois un mur à {} pas à gauche".format(agent_pos_vx - i))
+                            f"You see a wall {agent_pos_vx - i} step{'s' if agent_pos_vx - i > 1 else ''} left"
+                        )
+                    elif self.language == "french":
+                        list_textual_descriptions.append(
+                            "Tu vois un mur à {} pas à gauche".format(agent_pos_vx - i)
+                        )
                     object_seen = True
                 else:
                     object_seen = True
@@ -1404,11 +1409,14 @@ class MiniGridEnv(gym.Env):
         while i < image.shape[0] and not object_seen:
             if image[i][agent_pos_vy][0] != 0 and image[i][agent_pos_vy][0] != 1:
                 if image[i][agent_pos_vy][0] == 2:
-                    if self.language == 'english':
+                    if self.language == "english":
                         list_textual_descriptions.append(
-                            f"You see a wall {i - agent_pos_vx} step{'s' if i - agent_pos_vx > 1 else ''} right")
-                    elif self.language == 'french':
-                         list_textual_descriptions.append("Tu vois un mur à {} pas à droite".format(i - agent_pos_vx))
+                            f"You see a wall {i - agent_pos_vx} step{'s' if i - agent_pos_vx > 1 else ''} right"
+                        )
+                    elif self.language == "french":
+                        list_textual_descriptions.append(
+                            "Tu vois un mur à {} pas à droite".format(i - agent_pos_vx)
+                        )
                     object_seen = True
                 else:
                     object_seen = True
@@ -1422,74 +1430,99 @@ class MiniGridEnv(gym.Env):
                     relative_position = dict()
 
                     if i - agent_pos_vx > 0:
-                        if self.language == 'english':
+                        if self.language == "english":
                             relative_position["x_axis"] = ("right", i - agent_pos_vx)
-                        elif self.language == 'french':
-                             relative_position["x_axis"] = ("à droite", i - agent_pos_vx)
+                        elif self.language == "french":
+                            relative_position["x_axis"] = ("à droite", i - agent_pos_vx)
                     elif i - agent_pos_vx == 0:
-                        if self.language == 'english':
+                        if self.language == "english":
                             relative_position["x_axis"] = ("face", 0)
-                        elif self.language == 'french':
+                        elif self.language == "french":
                             relative_position["x_axis"] = ("en face", 0)
                     else:
-                        if self.language == 'english':
+                        if self.language == "english":
                             relative_position["x_axis"] = ("left", agent_pos_vx - i)
-                        elif self.language == 'french':
+                        elif self.language == "french":
                             relative_position["x_axis"] = ("à gauche", agent_pos_vx - i)
                     if agent_pos_vy - j > 0:
-                        if self.language == 'english':
+                        if self.language == "english":
                             relative_position["y_axis"] = ("forward", agent_pos_vy - j)
-                        elif self.language == 'french':
+                        elif self.language == "french":
                             relative_position["y_axis"] = ("devant", agent_pos_vy - j)
                     elif agent_pos_vy - j == 0:
-                        if self.language == 'english':
+                        if self.language == "english":
                             relative_position["y_axis"] = ("forward", 0)
-                        elif self.language == 'french':
+                        elif self.language == "french":
                             relative_position["y_axis"] = ("devant", 0)
 
                     distances = []
                     if relative_position["x_axis"][0] in ["face", "en face"]:
-                        distances.append((relative_position["y_axis"][1], relative_position["y_axis"][0]))
+                        distances.append(
+                            (
+                                relative_position["y_axis"][1],
+                                relative_position["y_axis"][0],
+                            )
+                        )
                     elif relative_position["y_axis"][1] == 0:
-                        distances.append((relative_position["x_axis"][1], relative_position["x_axis"][0]))
+                        distances.append(
+                            (
+                                relative_position["x_axis"][1],
+                                relative_position["x_axis"][0],
+                            )
+                        )
                     else:
-                        distances.append((relative_position["x_axis"][1], relative_position["x_axis"][0]))
-                        distances.append((relative_position["y_axis"][1], relative_position["y_axis"][0]))
+                        distances.append(
+                            (
+                                relative_position["x_axis"][1],
+                                relative_position["x_axis"][0],
+                            )
+                        )
+                        distances.append(
+                            (
+                                relative_position["y_axis"][1],
+                                relative_position["y_axis"][0],
+                            )
+                        )
 
                     description = ""
                     if object[0] != 4:  # if it is not a door
-                        if self.language == 'english':
+                        if self.language == "english":
                             description = f"You see a {IDX_TO_COLOR[object[1]]} {IDX_TO_OBJECT[object[0]]} "
-                        elif self.language == 'french':
+                        elif self.language == "french":
                             description = f"Tu vois une {IDX_TO_OBJECT[object[0]]} {IDX_TO_COLOR[object[1]]} "
 
                     else:
                         if IDX_TO_STATE[object[2]] != 0:  # if it is not open
-                            if self.language == 'english':
+                            if self.language == "english":
                                 description = f"You see a {IDX_TO_STATE[object[2]]} {IDX_TO_COLOR[object[1]]} {IDX_TO_OBJECT[object[0]]} "
-                            elif self.language == 'french':
+                            elif self.language == "french":
                                 description = f"Tu vois une {IDX_TO_OBJECT[object[0]]} {IDX_TO_COLOR[object[1]]} {IDX_TO_STATE[object[2]]} "
 
                         else:
-                            if self.language == 'english':
+                            if self.language == "english":
                                 description = f"You see an {IDX_TO_STATE[object[2]]} {IDX_TO_COLOR[object[1]]} {IDX_TO_OBJECT[object[0]]} "
-                            elif self.language == 'french':
+                            elif self.language == "french":
                                 description = f"Tu vois une {IDX_TO_OBJECT[object[0]]} {IDX_TO_COLOR[object[1]]} {IDX_TO_STATE[object[2]]} "
 
                     for _i, _distance in enumerate(distances):
                         if _i > 0:
-                            if self.language == 'english':
+                            if self.language == "english":
                                 description += " and "
-                            elif self.language == 'french':
+                            elif self.language == "french":
                                 description += " et "
 
-                        if self.language == 'english':
+                        if self.language == "english":
                             description += f"{_distance[0]} step{'s' if _distance[0] > 1 else ''} {_distance[1]}"
-                        elif self.language == 'french':
+                        elif self.language == "french":
                             description += f"{_distance[0]} pas {_distance[1]}"
 
                     list_textual_descriptions.append(description)
 
-        AVAIL_ACTIONS = "0: rotate left, 1: rotate right, 2: move forward, 3: pickup an object"
+        AVAIL_ACTIONS = (
+            "0: rotate left, 1: rotate right, 2: move forward, 3: pickup an object"
+        )
 
-        return {'observation': list_textual_descriptions, 'available actions': AVAIL_ACTIONS}
+        return {
+            "observation": list_textual_descriptions,
+            "available actions": AVAIL_ACTIONS,
+        }
